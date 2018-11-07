@@ -1,2 +1,2 @@
-web: bundle exec puma -p $PORT
-webpack: bin/webpack-dev-server
+web: rails s -p 3000
+client: sh -c 'rm app/assets/webpack/* || true && cd client && npm run build:development'
