@@ -1,15 +1,14 @@
 import React from 'react';
 import AppointmentForm from './appointment_form';
 import { AppointmentsList } from './appointments_list';
-import update from 'immutability-helper';
 
 export default class Appointments extends React.Component {
-  constructor (props, railsContext) {
+  constructor (props) {
     super(props)
     this.state = {
       appointments: this.props.appointments,
-      title: 'Team standup meeting',
-      appt_time: '25 January 2016 9am'
+      title: '',
+      appt_time: ''
     }
   }
 
@@ -26,12 +25,13 @@ export default class Appointments extends React.Component {
           });
   }
 
-  addNewAppointment (appointment) {
-    const appointments = update(this.state.appointments, { $push: [appointment]});
-    this.setState({
-      appointments: appointments.sort(function(a,b){
+  addNewAppointment(appointment) {
+    const sortedAppointments = [...this.state.appointments, appointment].sort(function(a,b){
         return new Date(a.appt_time) - new Date(b.appt_time);
       })
+
+    this.setState({
+      appointments: sortedAppointments
     });
   }
 
@@ -39,9 +39,10 @@ export default class Appointments extends React.Component {
     return (
       <div>
         <AppointmentForm input_title={this.state.title}
-          input_appt_time={this.state.appt_time}
-          onUserInput={(obj) => this.handleUserInput(obj)}
-          onFormSubmit={() => this.handleFormSubmit()} />
+                         input_appt_time={this.state.appt_time}
+                         onUserInput={(obj) => this.handleUserInput(obj)}
+                         onFormSubmit={() => this.handleFormSubmit()} 
+        />
         <AppointmentsList appointments={this.state.appointments} />
       </div>
     )
